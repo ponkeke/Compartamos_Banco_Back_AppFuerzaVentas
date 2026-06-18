@@ -1,0 +1,17 @@
+INFO:     127.0.0.1:58633 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58634 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64463 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64464 - "GET /cliente/home HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64465 - "POST /contactos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64466 - "GET /contactos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64467 - "POST /operaciones/yapeo HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64468 - "POST /operaciones/deposito HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64469 - "GET /operaciones/movimientos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64470 - "POST /creditos/solicitar HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64471 - "GET /creditos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64472 - "GET /notificaciones HTTP/1.1" 200 OK
+INFO:     127.0.0.1:64473 - "PUT /notificaciones/4/leer HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60569 - "POST /auth/register HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60570 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60571 - "POST /contactos HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60572 - "DELETE /contactos/2 HTTP/1.1" 200 OK
