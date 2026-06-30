@@ -1,8 +1,8 @@
-from fastapi import HTTPException, status
+from fastapi import HTTPException
 from sqlalchemy.orm import Session
 from app.repositories.cuenta_repository import CuentaRepository
 from app.repositories.transaccion_repository import TransaccionRepository
-from app.repositories.notificacion_repository import NotificacionRepository
+from app.repositories.contacto_repository import ContactoRepository
 from decimal import Decimal
 
 
@@ -11,75 +11,34 @@ class OperacionService:
         self.db = db
         self.cuenta_repo = CuentaRepository(db)
         self.transaccion_repo = TransaccionRepository(db)
-        self.notificacion_repo = NotificacionRepository(db)
+        self.contacto_repo = ContactoRepository(db)
 
-    def yapeo(self, cliente_id: int, numero_destino: str, monto: Decimal):
+    def listar_movimientos(self, cliente_id: int):
         cuenta = self.cuenta_repo.get_by_cliente_id(cliente_id)
         if not cuenta:
             raise HTTPException(status_code=404, detail="Cuenta no encontrada")
+        return self.transaccion_repo.get_by_cuenta_id(cuenta.id, limit=50)
 
-        if cuenta.saldo < monto:
-            raise HTTPException(status_code=400, detail="Saldo insuficiente")
-
-        nuevo_saldo = cuenta.saldo - monto
-        self.cuenta_repo.update_saldo(cuenta.id, nuevo_saldo)
-
-        transaccion = self.transaccion_repo.create(
-            cuenta_id=cuenta.id,
-            tipo="YAPEO",
-            descripcion=f"Yapeo a {numero_destino}",
-            monto=-monto,
-            saldo_resultante=nuevo_saldo,
-        )
-
-        self.notificacion_repo.create(
-            cliente_id=cliente_id,
-            tipo="YAPEO",
-            titulo="Yapeo realizado",
-            descripcion=f"Realizaste un yapeo por S/ {monto} a {numero_destino}",
-        )
-
-        return {
-            "comprobante": {
-                "tipo": "YAPEO",
-                "monto": -monto,
-                "destino": numero_destino,
-                "saldo_resultante": nuevo_saldo,
-                "fecha": transaccion.fecha,
-            }
-        }
-
-    def deposito(self, cliente_id: int, monto: Decimal, descripcion: str | None):
-        cuenta = self.cuenta_repo.get_by_cliente_id(cliente_id)
+    def registrar_movimiento(self, cuenta_id: int, tipo: str, descripcion: str | None, monto: Decimal):
+        cuenta = self.cuenta_repo.get_by_id(cuenta_id)
         if not cuenta:
             raise HTTPException(status_code=404, detail="Cuenta no encontrada")
-
-        nuevo_saldo = cuenta.saldo + monto
-        self.cuenta_repo.update_saldo(cuenta.id, nuevo_saldo)
+        if tipo in ("YAPEO_ENVIADO", "RETIRO", "PAGO"):
+            nuevo_saldo = cuenta.saldo - monto
+            if nuevo_saldo < 0:
+                raise HTTPException(status_code=400, detail="Saldo insuficiente")
+        else:
+            nuevo_saldo = cuenta.saldo + monto
 
         transaccion = self.transaccion_repo.create(
-            cuenta_id=cuenta.id,
-            tipo="DEPOSITO",
-            descripcion=descripcion or "Depósito en ventanilla",
+            cuenta_id=cuenta_id,
+            tipo=tipo,
+            descripcion=descripcion,
             monto=monto,
             saldo_resultante=nuevo_saldo,
         )
+        self.cuenta_repo.update_saldo(cuenta_id, nuevo_saldo)
+        return transaccion
 
-        self.notificacion_repo.create(
-            cliente_id=cliente_id,
-            tipo="DEPOSITO",
-            titulo="Depósito recibido",
-            descripcion=f"Se realizó un depósito por S/ {monto}",
-        )
-
-        return {
-            "mensaje": "Depósito exitoso",
-            "saldo_resultante": nuevo_saldo,
-            "fecha": transaccion.fecha,
-        }
-
-    def movimientos(self, cliente_id: int):
-        cuenta = self.cuenta_repo.get_by_cliente_id(cliente_id)
-        if not cuenta:
-            raise HTTPException(status_code=404, detail="Cuenta no encontrada")
-        return self.transaccion_repo.list_by_cuenta_id(cuenta.id)
+    def listar_movimientos_global(self):
+        return self.transaccion_repo.list_all()

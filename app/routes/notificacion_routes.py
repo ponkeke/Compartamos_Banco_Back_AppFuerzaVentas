@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from app.core.cfg_database import get_db
 from app.core.security import get_current_cliente_id
@@ -19,9 +19,8 @@ def marcar_leida(notificacion_id: int, cliente_id: int = Depends(get_current_cli
     repo = NotificacionRepository(db)
     notif = repo.get_by_id(notificacion_id)
     if not notif:
+        from fastapi import HTTPException
         raise HTTPException(status_code=404, detail="Notificación no encontrada")
-    if notif.cliente_id != cliente_id:
-        raise HTTPException(status_code=403, detail="No puedes modificar esta notificación")
     repo.marcar_leida(notif)
     db.commit()
     return notif

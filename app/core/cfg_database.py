@@ -13,7 +13,7 @@ _db_url = URL.create(
     port=5432,
     database="compartamos_banco_db",
 )
-engine = create_engine(_db_url, pool_pre_ping=True)
+engine = create_engine(_db_url, pool_pre_ping=True, echo=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 

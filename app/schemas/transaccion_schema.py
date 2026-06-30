@@ -16,11 +16,8 @@ class TransaccionOut(BaseModel):
         from_attributes = True
 
 
-class YapeoRequest(BaseModel):
-    numero_destino: str = Field(..., min_length=9, max_length=20)
+class MovimientoRequest(BaseModel):
+    cuenta_id: int
+    tipo: str = Field(..., max_length=50)
+    descripcion: str | None = Field(None, max_length=255)
     monto: Decimal = Field(..., gt=0)
-
-
-class DepositoRequest(BaseModel):
-    monto: Decimal = Field(..., gt=0)
-    descripcion: str | None = None

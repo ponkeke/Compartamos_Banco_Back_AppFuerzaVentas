@@ -1,15 +1,6 @@
 from pydantic import BaseModel, Field
 
 
-class RegisterRequest(BaseModel):
-    dni: str = Field(..., min_length=8, max_length=8)
-    nombres: str = Field(..., min_length=1, max_length=100)
-    apellidos: str = Field(..., min_length=1, max_length=100)
-    password: str = Field(..., min_length=6)
-
-
-# ── Cliente login ──────────────────────────────────────────
-
 class LoginClienteIn(BaseModel):
     numero_documento: str = Field(..., min_length=8, max_length=8)
     password: str
@@ -21,6 +12,9 @@ class ClienteDataOut(BaseModel):
     nombres: str
     apellidos: str
 
+    class Config:
+        from_attributes = True
+
 
 class LoginClienteResponse(BaseModel):
     access_token: str
@@ -28,8 +22,6 @@ class LoginClienteResponse(BaseModel):
     tipo_usuario: str = "CLIENTE"
     cliente: ClienteDataOut
 
-
-# ── Empleado login ─────────────────────────────────────────
 
 class LoginEmpleadoIn(BaseModel):
     codigo_empleado: str = Field(..., min_length=1, max_length=20)
@@ -42,6 +34,9 @@ class EmpleadoDataOut(BaseModel):
     nombres: str
     apellidos: str
     cargo: str
+
+    class Config:
+        from_attributes = True
 
 
 class LoginEmpleadoResponse(BaseModel):

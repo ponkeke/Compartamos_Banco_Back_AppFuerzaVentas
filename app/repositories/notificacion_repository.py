@@ -14,8 +14,12 @@ class NotificacionRepository:
             titulo=titulo,
             descripcion=descripcion,
         )
+        print("        >>> ANTES DE DB.ADD (notificacion)")
         self.db.add(notif)
+        print("        >>> DESPUES DE DB.ADD (notificacion)")
+        print("        >>> ANTES DE DB.FLUSH (notificacion)")
         self.db.flush()
+        print("        >>> DESPUES DE DB.FLUSH (notificacion)")
         return notif
 
     def get_by_cliente_id(self, cliente_id: int):
@@ -33,3 +37,10 @@ class NotificacionRepository:
         notificacion.leida = True
         self.db.flush()
         return notificacion
+
+    def get_all(self):
+        return (
+            self.db.query(Notificacion)
+            .order_by(desc(Notificacion.fecha))
+            .all()
+        )

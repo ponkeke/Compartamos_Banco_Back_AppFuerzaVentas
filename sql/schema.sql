@@ -112,4 +112,19 @@ CREATE INDEX IF NOT EXISTS idx_cuentas_cliente ON cuentas(cliente_id);
 CREATE INDEX IF NOT EXISTS idx_transacciones_cuenta ON transacciones(cuenta_id);
 CREATE INDEX IF NOT EXISTS idx_solicitudes_cliente ON solicitudes_credito(cliente_id);
 CREATE INDEX IF NOT EXISTS idx_creditos_cliente ON creditos(cliente_id);
+CREATE TABLE IF NOT EXISTS solicitudes_registro_cliente (
+    id SERIAL PRIMARY KEY,
+    dni VARCHAR(8) NOT NULL,
+    nombres VARCHAR(100) NOT NULL,
+    apellidos VARCHAR(100) NOT NULL,
+    celular VARCHAR(15) NOT NULL,
+    correo VARCHAR(100) NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    estado VARCHAR(20) NOT NULL DEFAULT 'PENDIENTE',
+    observacion TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_solicitudes_registro_dni ON solicitudes_registro_cliente(dni);
+CREATE INDEX IF NOT EXISTS idx_solicitudes_registro_estado ON solicitudes_registro_cliente(estado);
 CREATE INDEX IF NOT EXISTS idx_notificaciones_cliente ON notificaciones(cliente_id);

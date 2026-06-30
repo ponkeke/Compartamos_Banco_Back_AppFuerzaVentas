@@ -15,9 +15,10 @@ class ContactoRepository:
         self.db.flush()
         return contacto
 
-    def get_by_id(self, contacto_id: int) -> Contacto | None:
-        return self.db.query(Contacto).filter(Contacto.id == contacto_id).first()
-
-    def delete(self, contacto: Contacto):
-        self.db.delete(contacto)
-        self.db.flush()
+    def delete(self, contacto_id: int):
+        contacto = self.db.query(Contacto).filter(Contacto.id == contacto_id).first()
+        if contacto:
+            self.db.delete(contacto)
+            self.db.flush()
+            return True
+        return False

@@ -54,7 +54,8 @@ http://127.0.0.1:8003/docs
 | Método | Ruta | Descripción |
 |--------|------|-------------|
 | POST | /auth/register | Registrar nuevo cliente |
-| POST | /auth/login | Iniciar sesión |
+| POST | /auth/login-empleado | Login empleado |
+| POST | /auth/login-cliente | Login cliente |
 | GET | /cliente/home | Dashboard del cliente |
 | GET | /contactos | Listar contactos |
 | POST | /contactos | Crear contacto |
@@ -62,6 +63,11 @@ http://127.0.0.1:8003/docs
 | POST | /operaciones/yapeo | Realizar yapeo |
 | POST | /operaciones/deposito | Realizar depósito |
 | GET | /operaciones/movimientos | Ver movimientos |
+| POST | /auth/solicitud-registro | Solicitar registro de cliente |
+| GET | /auth/solicitud-registro/{id} | Obtener solicitud de registro |
+| GET | /auth/solicitudes-registro | Listar solicitudes de registro |
+| POST | /auth/solicitudes-registro/{id}/aprobar | Aprobar solicitud |
+| POST | /auth/solicitudes-registro/{id}/rechazar | Rechazar solicitud |
 | POST | /creditos/solicitar | Solicitar crédito |
 | GET | /creditos | Listar créditos/solicitudes |
 | GET | /notificaciones | Listar notificaciones |

@@ -20,7 +20,7 @@ class TransaccionRepository:
         self.db.flush()
         return transaccion
 
-    def get_by_cuenta_id(self, cuenta_id: int, limit: int = 10):
+    def get_by_cuenta_id(self, cuenta_id: int, limit: int = 20):
         return (
             self.db.query(Transaccion)
             .filter(Transaccion.cuenta_id == cuenta_id)
@@ -29,10 +29,10 @@ class TransaccionRepository:
             .all()
         )
 
-    def list_by_cuenta_id(self, cuenta_id: int):
+    def list_all(self):
         return (
             self.db.query(Transaccion)
-            .filter(Transaccion.cuenta_id == cuenta_id)
             .order_by(desc(Transaccion.fecha))
+            .limit(50)
             .all()
         )

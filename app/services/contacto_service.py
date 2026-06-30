@@ -12,13 +12,12 @@ class ContactoService:
         return self.contacto_repo.get_by_cliente_id(cliente_id)
 
     def crear(self, cliente_id: int, nombre: str, apellido: str, telefono: str):
+        if not nombre or not apellido or not telefono:
+            raise HTTPException(status_code=400, detail="nombre, apellido y telefono son obligatorios")
         return self.contacto_repo.create(cliente_id, nombre, apellido, telefono)
 
     def eliminar(self, contacto_id: int, cliente_id: int):
-        contacto = self.contacto_repo.get_by_id(contacto_id)
-        if not contacto:
+        eliminado = self.contacto_repo.delete(contacto_id)
+        if not eliminado:
             raise HTTPException(status_code=404, detail="Contacto no encontrado")
-        if contacto.cliente_id != cliente_id:
-            raise HTTPException(status_code=403, detail="No puedes eliminar este contacto")
-        self.contacto_repo.delete(contacto)
         return {"mensaje": "Contacto eliminado"}

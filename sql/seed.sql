@@ -23,7 +23,7 @@ VALUES (
 -- Empleado demo (password: 123456)
 INSERT INTO empleados (codigo_empleado, nombres, apellidos, password, cargo, estado)
 VALUES (
-    'EMP001',
+    'EMP01',
     'CARLOS',
     'GARCIA MENDOZA',
     '$2b$12$.fcfYhi/ZoRGMyEvutTtWu.9g.UzyqqG8ar4eH4CNd16dz0VwsaC.',
